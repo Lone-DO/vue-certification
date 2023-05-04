@@ -1,8 +1,10 @@
 <template>
   <div id='reactive'>
-    <span>Current Count: {{ state.count }}</span>
-    <button @click='increment'>+</button>
-    <button @click='decrement'>-</button>
+    <div id='reactive-container'>
+      <span>Current Count: {{ state.count }}</span>
+      <button @click='increment'>+</button>
+      <button @click='decrement'>-</button>
+    </div>
   </div>
 </template>
 
@@ -19,7 +21,9 @@
 
 <style lang='scss'>
   #reactive {
-    gap: .5rem;
-    display: flex;
+    &-container {
+      gap: .5rem;
+      display: flex;
+    }
   }
 </style>
