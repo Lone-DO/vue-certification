@@ -16,14 +16,20 @@
         <li v-for="person in state.people" :key="person">{{ person }}</li>
       </ul>
     </fieldset>
+    <fieldset>
+      <legend>Composable - Mouse Tracking</legend>
+      <p>Mouse position is at: {{ x }}, {{ y }}</p>
+    </fieldset>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { Ref } from 'vue';
+import { useMouse } from '@/composables/mouse.ts';
 /** Declared Types */
 
+const { x, y } = useMouse();
 interface State {
   count: number;
   people: Array<string>;
