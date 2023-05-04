@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { Ref } from 'vue';
-import { useMouse } from '@/composables/mouse.ts';
+import { useMouse } from '@/composables/mouse';
 /** Declared Types */
 
 const { x, y } = useMouse();
