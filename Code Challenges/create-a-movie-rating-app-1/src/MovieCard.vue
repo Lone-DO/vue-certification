@@ -5,6 +5,10 @@ defineProps({
     type: Object,
     required: true,
   },
+  updateRating: {
+    type: Function,
+    required: true,
+  },
 });
 </script>
 
@@ -27,11 +31,12 @@ defineProps({
         <div class="movie-card__info-ratings">
           <span>Rating: ({{ movie.rating }}/5)</span>
           <img
-            v-for="index in movie.rating"
+            v-for="index in movie.ratings"
             :key="index"
-            src="star.ico"
+            :src="movie.rating >= index ? 'star.ico' : 'star_unselected.ico'"
+            :data-active="movie.rating === index"
             alt="rating star"
-            :data-active="index <= movie.rating"
+            @click="updateRating(movie, index)"
           />
         </div>
       </div>
@@ -100,6 +105,18 @@ $border-radius-size: 8px;
       }
       img {
         width: 1rem;
+        transition: transform 250ms;
+        cursor: pointer;
+        &:hover {
+          transform: scale(1.25);
+        }
+        &:active {
+          transform: scale(1.75);
+        }
+        &[data-active='true'] {
+          cursor: not-allowed;
+          transform: none;
+        }
       }
     }
   }

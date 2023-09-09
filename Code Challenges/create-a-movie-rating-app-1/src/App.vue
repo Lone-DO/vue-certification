@@ -1,6 +1,15 @@
 <script setup>
-import { items as movies } from './movies.json';
+import { ref } from 'vue';
+import { items as _movies } from './movies.json';
 import MovieCard from './MovieCard.vue';
+
+const parsed = _movies.map((movie) => ({ ...movie, ratings: [1, 2, 3, 4, 5] }));
+const movies = ref(parsed);
+
+function updateRating(movie = {}, rating = 0) {
+  movie.rating = rating;
+}
+
 /*
  This is an Icon that you can use to represent the stars if you like
  otherwise you could just use a simple ⭐️ emoji, or * character.
@@ -12,7 +21,7 @@ import MovieCard from './MovieCard.vue';
   <!-- This is where your template goes	-->
   <main id="root">
     <section id="content">
-      <MovieCard v-for="movie in movies" :key="movie.id" v-bind="{ movie }" />
+      <MovieCard v-for="movie in movies" :key="movie.id" v-bind="{ movie, updateRating }" />
     </section>
   </main>
 </template>
