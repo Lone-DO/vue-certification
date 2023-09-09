@@ -15,7 +15,17 @@ defineProps({
 <template>
   <div class="movie-card">
     <div class="movie-card__cover">
-      <img class="movie-card__image" :src="movie.image" :alt="movie.name" />
+      <div class="movie-card__cover-rating">
+        <div class="movie-card__cover-number">
+          <span>{{ movie.rating || '-' }}</span>
+        </div>
+        <img
+          class="movie-card__cover-star"
+          :src="movie.rating ? 'star.ico' : 'star_unselected.ico'"
+          :alt="movie.name"
+        />
+      </div>
+      <img class="movie-card__cover-image" :src="movie.image" :alt="movie.name" />
     </div>
     <div class="movie-card__info">
       <div class="movie-card__info__header">
@@ -58,8 +68,25 @@ $border-radius-size: 8px;
   &__cover {
     height: 66%;
     overflow: hidden;
-    img {
+    &-image {
       border-radius: $border-radius-size $border-radius-size 0 0;
+    }
+    &-rating {
+      top: 0;
+      right: 0;
+      position: absolute;
+      img {
+        width: 4rem;
+      }
+    }
+    &-number {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      font-size: 2rem;
+      position: absolute;
+      align-items: center;
+      justify-content: center;
     }
   }
   &__info {
