@@ -11,6 +11,13 @@ module.exports = {
     'plugin:vue/strongly-recommended',
     'prettier',
   ],
+  env: {
+    node: true,
+    commonjs: true,
+  },
+  globals: {
+    process: true,
+  },
   parserOptions: {
     ecmaVersion: 'latest',
     parser: '@typescript-eslint/parser',
