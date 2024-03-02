@@ -1,5 +1,4 @@
 <script setup>
-import { defineProps } from 'vue';
 defineProps({
   movie: {
     type: Object,
@@ -17,7 +16,7 @@ defineProps({
     <div class="movie-card__cover">
       <div class="movie-card__cover-rating">
         <div class="movie-card__cover-number">
-          <span>{{ movie.rating || '-' }}</span>
+          <span :title="!movie.rating && 'unrated'">{{ movie.rating || '-' }}</span>
         </div>
         <img
           class="movie-card__cover-star"
@@ -39,7 +38,7 @@ defineProps({
       <div class="movie-card__info__footer">
         <p class="movie-card__info-description">{{ movie.description }}</p>
         <div class="movie-card__info-ratings">
-          <span>Rating: ({{ movie.rating }}/5)</span>
+          <span :title="!movie.rating && 'unrated'">Rating: ({{ movie.rating || '-' }}/5)</span>
           <img
             v-for="index in movie.ratings"
             :key="index"
