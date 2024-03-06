@@ -1,42 +1,21 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import api from './common/api.js';
 import { items as _movies } from './movies.json';
 import MovieCard from './MovieCard.vue';
+import AppHeader from './AppHeader.vue';
+import Movie from './model/Movie.js';
 
-const genres = ref([]);
+const _genres = ref([]);
+const genres = computed(() => _genres.value.map(({ description }) => description));
+
 const movies = ref([]);
 const storedMovies = ref([]);
 
-const RATINGS = [1, 2, 3, 4, 5];
-
-class Movie {
-  constructor(data) {
-    this.raw = data;
-    this.name = String(data?.name || '');
-    this.description = String(data?.description || '');
-    this.image = String(data?.image || '');
-    this.genre = String(data?.genre || '');
-    this.released = Boolean(data?.released || false);
-    this.rating = Number(data?.rating || 0);
-    this.ratings = RATINGS;
-
-    // return this.unpack(data);
-  }
-
-  // unpack(data) {
-  //   if (data) {
-  //     for (const key in data) {
-  //       if (this[key] === undefined) this[key] = data[key];
-  //     }
-  //   }
-  //   return this;
-  // }
-}
-
 async function getGenres() {
   try {
-    genres.value = await api.get('/title/list-popular-genres');
+    const { genres: data } = await api.get('/title/list-popular-genres');
+    _genres.value = data;
   } catch (error) {
     console.error(error);
   }
@@ -59,17 +38,13 @@ function saveMovies() {
   return data ? localStorage.setItem('movies', data) : null;
 }
 
-function addMovie(movie) {
-  return movie && movies.value.push(new Movie(movie));
-}
-
 function parseMovies(data) {
   return data && data.map((movie) => new Movie(movie));
 }
 
 onMounted(async () => {
   await restoreMovies();
-  // await getGenres();
+  await getGenres();
   movies.value = await parseMovies(storedMovies.value);
 });
 /*
@@ -82,6 +57,7 @@ onMounted(async () => {
 <template>
   <!-- This is where your template goes	-->
   <main id="root">
+    <AppHeader :movies />
     <section id="content">
       <MovieCard v-for="movie in movies" :key="movie.id" v-bind="{ movie, updateRating, genres }" />
     </section>
@@ -94,6 +70,7 @@ onMounted(async () => {
   width: 100vw;
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   #content {
     gap: 1rem;
