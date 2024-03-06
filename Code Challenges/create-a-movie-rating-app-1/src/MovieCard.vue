@@ -145,6 +145,11 @@ $border-radius-size: 8px;
         }
       }
     }
+    &__footer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
   }
 }
 </style>
