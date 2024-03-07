@@ -7,6 +7,7 @@ export default class Movie {
     this.description = String(data?.description || '');
     this.image = String(data?.image || '');
     this.genre = String(data?.genre || '');
+    this.genres = Array.isArray(data?.genres) ? data.genres : [];
     this.released = Boolean(data?.released || false);
     this.rating = Number(data?.rating || 0);
     this.ratings = RATINGS;

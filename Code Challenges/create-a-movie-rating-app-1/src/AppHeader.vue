@@ -30,7 +30,7 @@ function addMovie(movie) {
     </span>
     <div id="header-controller">
       <button id="btn-reset" @click="reset">Reset Ratings</button>
-      <button id="btn-create" @click="create">Add Movie</button>
+      <button id="btn-create" @click="$emit('new')">Add Movie</button>
       <button id="btn-load" @click="fetch">Load from API</button>
     </div>
   </header>
