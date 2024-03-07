@@ -1,10 +1,13 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+/** General */
 import api from './common/api.js';
+import Movie from './model/Movie.js';
 import { items as _movies } from './movies.json';
+/** Components */
 import MovieCard from './MovieCard.vue';
 import AppHeader from './AppHeader.vue';
-import Movie from './model/Movie.js';
+import MovieDetails from './MovieDetails.vue';
 
 const _genres = ref([]);
 const genres = computed(() => _genres.value.map(({ description }) => description));
@@ -12,13 +15,20 @@ const genres = computed(() => _genres.value.map(({ description }) => description
 const movies = ref([]);
 const storedMovies = ref([]);
 
+const selectedMovie = ref(null);
+
 async function getGenres() {
   try {
-    const { genres: data } = await api.get('/title/list-popular-genres');
-    _genres.value = data;
+    const storage = localStorage.getItem('genres');
+    if (!storage) {
+      const { genres: data } = await api.get('/title/list-popular-genres');
+      localStorage.setItem('genres', JSON.stringify(data));
+      _genres.value = data;
+    } else _genres.value = JSON.parse(storage);
   } catch (error) {
     console.error(error);
   }
+  return _genres;
 }
 
 function updateRating(movie = {}, rating = 0) {
@@ -30,6 +40,11 @@ function restoreMovies() {
   storedMovies.value = JSON.parse(localStorage.getItem('movies') || '[]');
   if (!storedMovies.value || !storedMovies.value?.length) storedMovies.value = _movies;
   return Promise.resolve(storedMovies);
+}
+
+function updateMovie() {
+  console.log(selectedMovie.value);
+  selectedMovie.value = null;
 }
 
 function saveMovies() {
@@ -57,7 +72,13 @@ onMounted(async () => {
 <template>
   <!-- This is where your template goes	-->
   <main id="root">
-    <AppHeader :movies />
+    <AppHeader v-bind="{ movies }" @new="selectedMovie = new Movie()" />
+    <MovieDetails
+      v-model="selectedMovie"
+      v-bind="{ genres }"
+      @close="selectedMovie = null"
+      @save="updateMovie()"
+    />
     <section id="content">
       <MovieCard v-for="movie in movies" :key="movie.id" v-bind="{ movie, updateRating, genres }" />
     </section>
